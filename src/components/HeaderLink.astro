@@ -9,8 +9,14 @@ const subpath = pathname.match(/[^\/]+/g);
 const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 ---
 
+// Compute the final HREF, prepending the base path if needed
+const destination = typeof href === 'string' && href.startsWith('/') 
+	? import.meta.env.BASE_URL.replace(/\/$/, '') + href 
+	: href;
+---
+
 <a
-	href={href}
+	href={destination}
 	class:list={[
 		className,
 		'px-3 py-2 transition-all duration-200',
