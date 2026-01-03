@@ -1,0 +1,104 @@
+---
+// Import the global.css file here so that it is included on
+// all pages through the use of the <BaseHead /> component.
+import '../styles/global.css';
+import type { ImageMetadata } from 'astro';
+import FallbackImage from '../assets/blog-placeholder-1.jpg';
+import { SITE_TITLE } from '../consts';
+
+interface Props {
+	title: string;
+	description: string;
+	image?: ImageMetadata;
+}
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const { title, description, image = FallbackImage } = Astro.props;
+---
+
+<!-- Theme Script (must be inline to prevent flash) -->
+<script is:inline>
+	// 在页面加载前立即执行，防止主题闪烁
+	(function() {
+		const getThemePreference = () => {
+			// 优先使用用户保存的设置
+			if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+				return localStorage.getItem('theme');
+			}
+			// 否则检测系统偏好
+			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+		};
+
+		const setTheme = (theme) => {
+			if (theme === 'dark') {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+			}
+			if (typeof localStorage !== 'undefined') {
+				localStorage.setItem('theme', theme);
+			}
+		};
+
+		// 初始化主题
+		setTheme(getThemePreference());
+
+		// 监听系统主题变化
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			// 只有在用户没有手动设置主题时才自动切换
+			if (typeof localStorage !== 'undefined' && !localStorage.getItem('theme')) {
+				setTheme(e.matches ? 'dark' : 'light');
+			}
+		});
+
+		// 提供全局函数供其他组件切换主题
+		window.toggleTheme = () => {
+			const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+			const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+			setTheme(newTheme);
+		};
+	})();
+</script>
+
+<!-- Global Metadata -->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="icon" type="image/jpeg" href="/favicon.jpg" />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<link
+	rel="alternate"
+	type="application/rss+xml"
+	title={SITE_TITLE}
+	href={new URL('rss.xml', Astro.site)}
+/>
+<meta name="generator" content={Astro.generator} />
+
+<!-- Font preloads -->
+<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
+<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+
+<!-- KaTeX CSS for math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.27/dist/katex.min.css" integrity="sha384-mXD7x5S50Ko38scHSnD4egvoExgMPbrseZorkbE49evAfv9nNcbrXJ8LLNsDgh9d" crossorigin="anonymous">
+
+<!-- Canonical URL -->
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Primary Meta Tags -->
+<title>{title}</title>
+<meta name="title" content={title} />
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content={Astro.url} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image.src, Astro.url)} />
+
+<!-- Twitter -->
+<meta property="twitter:card" content="summary_large_image" />
+<meta property="twitter:url" content={Astro.url} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
+<meta property="twitter:image" content={new URL(image.src, Astro.url)} />

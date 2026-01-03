@@ -1,0 +1,61 @@
+---
+const today = new Date();
+---
+
+<footer class="border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black mt-auto">
+	<div class="max-w-5xl mx-auto px-5 py-8">
+		<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+			<p class="text-sm text-neutral-500 dark:text-neutral-400">
+				&copy; {today.getFullYear()} Chang1o. All rights reserved.
+			</p>
+			<div class="flex items-center gap-6">
+				<a href="https://github.com/ChaNg1o1" target="_blank" class="text-sm text-neutral-500 dark:text-neutral-400 hover:text-black dark:hover:text-white transition-colors">
+					GitHub
+				</a>
+			</div>
+		</div>
+	</div>
+</footer>
+
+<!-- Mouse Glow Effect -->
+<div id="mouse-glow" class="pointer-events-none fixed inset-0 z-0 transition-colors duration-300" style="opacity: 0;"></div>
+
+<style>
+	/* 深色模式下的光晕颜色 */
+	:global(.dark) #mouse-glow {
+		background: radial-gradient(600px circle at var(--x, 0px) var(--y, 0px), rgba(255, 255, 255, 0.05), transparent 40%);
+        opacity: 1 !important;
+        mix-blend-mode: screen;
+	}
+    
+    /* 浅色模式下的阴影颜色 */
+    #mouse-glow {
+        background: radial-gradient(600px circle at var(--x, 0px) var(--y, 0px), rgba(0, 0, 0, 0.015), transparent 40%);
+        opacity: 1 !important;
+        mix-blend-mode: multiply;
+    }
+    
+    /* 确保 body 内部的内容在光晕之上（如果需要） */
+    :global(body > *:not(#mouse-glow)) {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<script is:inline>
+	const glow = document.getElementById('mouse-glow');
+	
+	if (glow) {
+		// 初始位置设置在屏幕外，避免加载时闪烁
+		glow.style.setProperty('--x', '-1000px');
+		glow.style.setProperty('--y', '-1000px');
+
+		window.addEventListener('mousemove', (e) => {
+			// 使用 requestAnimationFrame 优化性能
+			requestAnimationFrame(() => {
+				glow.style.setProperty('--x', `${e.clientX}px`);
+				glow.style.setProperty('--y', `${e.clientY}px`);
+			});
+		});
+	}
+</script>
