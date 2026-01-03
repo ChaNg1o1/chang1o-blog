@@ -10,6 +10,7 @@ import rehypeKatex from 'rehype-katex';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://ChaNg1o1.github.io',
+	base: '/chang1o-blog',
 	integrations: [mdx(), sitemap(), tailwind()],
 	server: {
 		port: 4321,
