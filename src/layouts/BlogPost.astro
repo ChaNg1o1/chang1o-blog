@@ -15,6 +15,11 @@ const { title, description, heroImage } = props;
 // Ensure dates are Date objects
 const pubDate = props.pubDate ? new Date(props.pubDate) : new Date();
 const updatedDate = props.updatedDate ? new Date(props.updatedDate) : undefined;
+
+// Resolve hero image path for subpath deployment
+const heroImageSource = typeof heroImage === 'string' && heroImage.startsWith('/')
+	? import.meta.env.BASE_URL.replace(/\/$/, '') + heroImage
+	: heroImage;
 ---
 
 <html lang="en">
@@ -108,7 +113,7 @@ const updatedDate = props.updatedDate ? new Date(props.updatedDate) : undefined;
 		<main>
 			<article>
 				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt="" />}
+					{heroImageSource && <Image width={1020} height={510} src={heroImageSource} alt="" />}
 				</div>
 				<div class="prose">
 					<div class="title">
