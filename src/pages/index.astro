@@ -28,13 +28,13 @@ const posts = (await getCollection('blog')).sort(
 				</div>
 				<div class="flex flex-wrap gap-4">
 					<a
-						href="/blog"
+						href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/blog`}
 						class="inline-flex items-center px-5 py-2.5 bg-black dark:bg-white text-white dark:text-black font-medium text-sm hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors"
 					>
 						阅读文章
 					</a>
 					<a
-						href="/about"
+						href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/about`}
 						class="inline-flex items-center px-5 py-2.5 border-2 border-black dark:border-white text-black dark:text-white font-medium text-sm hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
 					>
 						关于我
@@ -55,7 +55,7 @@ const posts = (await getCollection('blog')).sort(
 					{
 						posts.map((post) => (
 							<li class="border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-black dark:hover:border-white transition-colors">
-								<a href={`/blog/${post.id}/`} class="block p-6">
+								<a href={`${import.meta.env.BASE_URL.replace(/\/$/, '')}/blog/${post.id}/`} class="block p-6">
 									<div class="flex flex-col sm:flex-row sm:items-start gap-4">
 										<div class="flex-shrink-0 text-center border border-neutral-200 dark:border-neutral-800 p-3 min-w-[80px]">
 											<div class="text-2xl font-bold text-black dark:text-white">
